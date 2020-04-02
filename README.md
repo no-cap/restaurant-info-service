@@ -99,6 +99,8 @@ Example input:
  > API: /api/deleteInfo
 
 Deleting information from a current restaurant
+
+Example input:
 ```ssh
 {
   id: #
