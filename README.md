@@ -38,31 +38,36 @@ npm install
 ```
 
 
-API
-
-CRUD
 
 
-Create
 
-Post => Restaurant Info
+
+## CRUD API
+
+
+## Create
+Post 
+=> Restaurant Info
 
 Posts the header information of the restaurant;
-API: /restaurant
+ > API: /restaurant
 Example input:
+```ssh
 {
   rating: 4,
   comment: 'I really liked it ',
   name: 'Rowe, Mann and Conn'
 }
+```
 
 
 
-Read
-API: /currentRestaurant
+## Read
+ > API: /currentRestaurant
 Gets the information seeded into the database to display
 
 Example response:
+```ssh
 {
   id: 56
   category: "French"
@@ -70,14 +75,16 @@ Example response:
   claimed: "false"
   prize: "$"
 }
+```
 
 
-
-Update => Restaurant info
-API: /api/updateInfo
+## Update 
+=> Restaurant info
+ > API: /api/updateInfo
 Changes made in the restaurante information have to be updated
 
 Example input:
+```ssh
 {
   id: 74,
   category: "Italian",
@@ -85,16 +92,17 @@ Example input:
   claimed: "true",
   prize: "$$"
 }
+```
 
 
-Delete 
-API: /api/deleteInfo
+## Delete 
+ > API: /api/deleteInfo
 
 Deleting information from a current restaurant
-
+```ssh
 {
   id: #
 }
-
+```
 
 
