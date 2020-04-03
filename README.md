@@ -100,11 +100,18 @@ Example input:
 
 Deleting information from a current restaurant
 
+- Restaurant
+- Review
+
 Example input:
 ```ssh
 {
-  id: #
+  restaurant_id: #
 }
 ```
 
-
+```ssh
+{
+  review_id: #
+}
+```
