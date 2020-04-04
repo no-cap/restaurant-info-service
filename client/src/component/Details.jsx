@@ -97,9 +97,9 @@ class Details extends React.Component {
           Reviews
         </div>
         {this.updateDetailState(this.props.Reviews).ReviewProportion
-          .map((ratingPercentage, index) => {
-            const legend = `${5-index}  Stars`;
-            return <Bar percent={ratingPercentage} Star={legend} />;
+          .map((ratingPercentage, key) => {
+            const legend = `${5-key}  Stars`;
+            return (<Bar percent={ratingPercentage} Star={legend} key={key}/>);
           })}
       </div>
     );

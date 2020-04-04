@@ -5,45 +5,59 @@ import $ from 'jquery';
 import Details from './Details.jsx';
 import WriteReview from './WriteReview.jsx';
 import AddPhoto from './AddPhoto.jsx';
+import axios from 'axios';
 
 import styles from '../../dist/style.css';
 
 class RestaurantInfo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { Restaurant: {}, Review: {}, ShowDetails: false, ShowPhotoForm: false, ShowReviewForm: false, allReview: [] };
+    this.state = {
+      Restaurant: {},
+      Review: {},
+      ShowDetails: false,
+      ShowPhotoForm: false,
+      ShowReviewForm: false,
+      allReview: []
+    };
     this.updateState = this.updateState.bind(this);
     this.updateDetailsClickStatus = this.updateDetailsClickStatus.bind(this);
     this.updateWriteReviewClickStatus = this.updateWriteReviewClickStatus.bind(this);
     this.updateAddPhotoClickStatus = this.updateAddPhotoClickStatus.bind(this);
-}
-
-  componentDidMount() {
-    const that = this;
-    $.ajax({
-      method: 'GET',
-      url: '/restaurant',
-      dataType: 'json',
-      success: (data) => {
-        console.log('this is my ajax call from restaurant Info', data);
-        that.updateState(data);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
   }
 
-  updateState (data) {
+
+  componentDidMount() {
+    let that = this;
+    axios({
+      method: 'get',
+      url: '/restaurant',
+      dataType: 'json'
+    })
+      .then((resolve) => {
+        console.log('hello from didmount')
+        console.log(resolve.data)
+        that.updateState(resolve.data);
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
+  updateState(data) {
     var claimStatus;
     const allReview = [];
-    if (data[0].claimed === 'true') {
+    console.log(data[0].claimed)
+    if (data[0].claimed === "true") {
       claimStatus = 'Claimed';
     } else {
       claimStatus = 'Unclaimed';
     }
     const restaurant = {
-      claimed: claimStatus, name: data[0].restaurantname, price: data[0].prize, category: data[0].category 
+      claimed: claimStatus,
+      name: data[0].restaurantname,
+      price: data[0].prize,
+      category: data[0].category
     };
     if (data[0].rating !== undefined) {
       let average = data.reduce((accumulator, currentObj) => {
@@ -52,7 +66,7 @@ class RestaurantInfo extends React.Component {
 
       if (average % 1 < 0.76 && average % 1 > 0.24) {
         average = Math.floor(average) + 0.5;
-      } else { 
+      } else {
         average = Math.round(average);
       }
 
@@ -70,7 +84,7 @@ class RestaurantInfo extends React.Component {
     });
   }
 
-updateDetailsClickStatus() {
+  updateDetailsClickStatus() {
     console.log('Deatils clicked');
     if (!this.state.ShowPhotoForm && !this.state.ShowReviewForm) {
       this.setState({
@@ -78,9 +92,9 @@ updateDetailsClickStatus() {
         ShowReviewForm: this.state.ShowReviewForm, ShowPhotoForm: this.state.ShowPhotoForm, allReview: this.state.allReview
       });
     }
-}
+  }
 
-updateAddPhotoClickStatus() {
+  updateAddPhotoClickStatus() {
     console.log('Photo clicked')
     if (!this.state.ShowDetails && !this.state.ShowReviewForm) {
       this.setState({
@@ -88,9 +102,9 @@ updateAddPhotoClickStatus() {
         ShowReviewForm: this.state.ShowReviewForm, ShowPhotoForm: !this.state.ShowPhotoForm, allReview: this.state.allReview
       });
     }
-}
+  }
 
-updateWriteReviewClickStatus() {
+  updateWriteReviewClickStatus() {
     console.log('Review clicked')
     if (!this.state.ShowPhotoForm && !this.state.ShowDetails) {
       this.setState({
@@ -98,10 +112,10 @@ updateWriteReviewClickStatus() {
         ShowReviewForm: !this.state.ShowReviewForm, ShowPhotoForm: this.state.ShowPhotoForm, allReview: this.state.allReview
       });
     }
-}
+  }
 
   render() {
-    let stars =[];
+    let stars = [];
     const color = [
       "khaki",
       "gold",
@@ -115,8 +129,8 @@ updateWriteReviewClickStatus() {
           stars.push(
             <span className={styles["star_rating_" + Math.floor(this.state.Review.AverageRating)]}>
               <svg viewBox="0 0 160 160" width="30" height="30">
-                <path d="M110.6 0h-76.9c-18.6 0-33.7 15.1-33.7 33.7v76.9c0 18.6 15.1 33.7 33.7 33.7h76.9c18.6 0 33.7-15.1 33.7-33.7v-76.9c0-18.6-15.1-33.7-33.7-33.7z"/>
-                <path d="M33.3,0.3C14.7,0.3-0.4,15.4-0.4,34V111c0,18.6,15.1,33.7,33.7,33.7h38.3V0.3H33.3z"/>
+                <path d="M110.6 0h-76.9c-18.6 0-33.7 15.1-33.7 33.7v76.9c0 18.6 15.1 33.7 33.7 33.7h76.9c18.6 0 33.7-15.1 33.7-33.7v-76.9c0-18.6-15.1-33.7-33.7-33.7z" />
+                <path d="M33.3,0.3C14.7,0.3-0.4,15.4-0.4,34V111c0,18.6,15.1,33.7,33.7,33.7h38.3V0.3H33.3z" />
                 <path fill="#fff" d="M72 19.3l13.6 35.4 37.9 2-29.5 23.9 9.8 36.6-31.8-20.6-31.8 20.6 9.8-36.6-29.5-23.9 37.9-2z" />
               </svg>
             </span>
@@ -128,11 +142,11 @@ updateWriteReviewClickStatus() {
               <svg viewBox="0 0 160 160" width="30" height="30">
                 <defs>
                   <linearGradient id="half_grad">
-                    <stop offset="50%" stopColor={color[Math.floor(this.state.Review.AverageRating) - 1]}/>
+                    <stop offset="50%" stopColor={color[Math.floor(this.state.Review.AverageRating) - 1]} />
                   </linearGradient>
                 </defs>
-                <path d="M110.6 0h-76.9c-18.6 0-33.7 15.1-33.7 33.7v76.9c0 18.6 15.1 33.7 33.7 33.7h76.9c18.6 0 33.7-15.1 33.7-33.7v-76.9c0-18.6-15.1-33.7-33.7-33.7z"/>
-                <path d="M33.3,0.3C14.7,0.3-0.4,15.4-0.4,34V111c0,18.6,15.1,33.7,33.7,33.7h38.3V0.3H33.3z" fill="url(#half_grad)"/>
+                <path d="M110.6 0h-76.9c-18.6 0-33.7 15.1-33.7 33.7v76.9c0 18.6 15.1 33.7 33.7 33.7h76.9c18.6 0 33.7-15.1 33.7-33.7v-76.9c0-18.6-15.1-33.7-33.7-33.7z" />
+                <path d="M33.3,0.3C14.7,0.3-0.4,15.4-0.4,34V111c0,18.6,15.1,33.7,33.7,33.7h38.3V0.3H33.3z" fill="url(#half_grad)" />
                 <path fill="#fff" d="M72 19.3l13.6 35.4 37.9 2-29.5 23.9 9.8 36.6-31.8-20.6-31.8 20.6 9.8-36.6-29.5-23.9 37.9-2z" />
               </svg>
             </span>
@@ -142,9 +156,9 @@ updateWriteReviewClickStatus() {
         stars.push(
           <span className={styles.star_rating_blank}>
             <svg viewBox="0 0 160 160" width="30" height="30">
-              <path d="M110.6 0h-76.9c-18.6 0-33.7 15.1-33.7 33.7v76.9c0 18.6 15.1 33.7 33.7 33.7h76.9c18.6 0 33.7-15.1 33.7-33.7v-76.9c0-18.6-15.1-33.7-33.7-33.7z"/>
-              <path d="M33.3,0.3C14.7,0.3-0.4,15.4-0.4,34V111c0,18.6,15.1,33.7,33.7,33.7h38.3V0.3H33.3z"/>
-              <path fill="#fff" d="M72 19.3l13.6 35.4 37.9 2-29.5 23.9 9.8 36.6-31.8-20.6-31.8 20.6 9.8-36.6-29.5-23.9 37.9-2z"/>
+              <path d="M110.6 0h-76.9c-18.6 0-33.7 15.1-33.7 33.7v76.9c0 18.6 15.1 33.7 33.7 33.7h76.9c18.6 0 33.7-15.1 33.7-33.7v-76.9c0-18.6-15.1-33.7-33.7-33.7z" />
+              <path d="M33.3,0.3C14.7,0.3-0.4,15.4-0.4,34V111c0,18.6,15.1,33.7,33.7,33.7h38.3V0.3H33.3z" />
+              <path fill="#fff" d="M72 19.3l13.6 35.4 37.9 2-29.5 23.9 9.8 36.6-31.8-20.6-31.8 20.6 9.8-36.6-29.5-23.9 37.9-2z" />
             </svg>
           </span>
         );
@@ -157,16 +171,16 @@ updateWriteReviewClickStatus() {
           <span className={styles.Restaurant_Title}>
             {this.state.Restaurant.name}&ensp;
           </span>
-          {this.state.Restaurant.claimed === 'Unclaimed'?
+          {this.state.Restaurant.claimed === 'Unclaimed' ?
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className={styles.icon_svg_unclaim}><path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 12.75a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm1.76-5.76c-.14.14-.3.28-.44.4-.12.09-.25.19-.32.29-.11.13-.18.4-.18.57 0 .23-.1.46-.27.63a.75.75 0 0 1-.55.24c-.48 0-.83-.45-.83-.86-.01-.54.19-1.1.52-1.5.19-.23.4-.42.54-.53.11-.1.21-.18.28-.27.35-.37.36-.94.03-1.29-.14-.15-.37-.22-.62-.22-.25.01-.48.11-.6.27a.42.42 0 0 0-.09.27c0 .43-.38.78-.83.78-.46 0-.83-.35-.83-.78 0-.44.14-.85.41-1.2.42-.55 1.1-.88 1.86-.91.77-.04 1.47.24 1.94.74.44.47.65 1.06.65 1.67 0 .61-.22 1.22-.67 1.7z"></path></svg>
             </span> :
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className={styles.icon_svg_claim}><path d="M9 1a8 8 0 1 0 0 16A8 8 0 0 0 9 1zm3.96 6.28l-4.808 4.807-3.112-3.11a.8.8 0 1 1 1.13-1.132l1.982 1.98 3.677-3.677a.8.8 0 1 1 1.13 1.13z"></path></svg>
             </span>}
-            <span className={styles.ClaimStatus}>
+          <span className={styles.ClaimStatus}>
             {this.state.Restaurant.claimed}
-            </span>
+          </span>
         </div>
 
         <div className={styles.Details_ReviewCount}>
@@ -212,7 +226,7 @@ updateWriteReviewClickStatus() {
             <span className={styles.save_info_text}>Save</span>
           </button>
           <button className={styles.follow_button_info} type="button">
-            <span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" classNmae={styles.icon_svg_plus}><path d="M16 10h-6v6H8v-6H2V8h6V2h2v6h6v2z"></path></svg></span>
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className={styles.icon_svg_plus}><path d="M16 10h-6v6H8v-6H2V8h6V2h2v6h6v2z"></path></svg></span>
             <span className={styles.follow_info_text}>Follow</span>
           </button>
         </div>

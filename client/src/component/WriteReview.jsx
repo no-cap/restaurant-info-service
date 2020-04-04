@@ -41,7 +41,8 @@ class WriteReview extends React.Component {
         });
       },
       error: (err) => {
-        console.log('encounter error' ,err);
+        console.log('err')
+        console.log(err);
       }
     });
   }
