@@ -50,7 +50,7 @@ Post
 => Restaurant Info
 
 Posts the header information of the restaurant;
- > API: /restaurant
+ > API: /restaurant/:id
 Example input:
 ```ssh
 {
@@ -63,7 +63,7 @@ Example input:
 
 
 ## Read
- > API: /currentRestaurant
+ > API: /restaurants/:id
 Gets the information seeded into the database to display
 
 Example response:
@@ -80,7 +80,7 @@ Example response:
 
 ## Update 
 => Restaurant info
- > API: /api/updateInfo
+ > API: /restaurants/:id
 Changes made in the restaurante information have to be updated
 
 Example input:
@@ -96,7 +96,7 @@ Example input:
 
 
 ## Delete 
- > API: /api/deleteInfo
+ > API: /restaurants/:id
 
 Deleting information from a current restaurant
 
