@@ -35,9 +35,8 @@ class RestaurantInfo extends React.Component {
       dataType: 'json'
     })
       .then((resolve) => {
-        console.log('hello from didmount')
-        console.log(resolve.data)
-        that.updateState(resolve.data);
+        console.log(resolve)
+        that.updateState(resolve.data.rows);
       })
       .catch((e) => {
         console.log(e)
@@ -55,7 +54,7 @@ class RestaurantInfo extends React.Component {
     }
     const restaurant = {
       claimed: claimStatus,
-      name: data[0].restaurantname,
+      name: data[0].restaurant_name,
       price: data[0].prize,
       category: data[0].category
     };

@@ -8,7 +8,7 @@ const categories = ['Japanese', 'Vietamese', 'Chinese', 'Korean', 'American', 'M
 
 const dataGen = () => {
     writer.pipe(fs.createWriteStream('data.csv'));
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 1000; i++) {
         const priceRange = ['$', '$$', '$$$']
         const randomPrice = priceRange[Math.floor(Math.random() * 3)]
         const categoriesIndex = Math.floor(Math.random() * categories.length);
@@ -19,6 +19,7 @@ const dataGen = () => {
             Claimstatus = true;
         }
         writer.write({
+            id: counter++,
             category: categories[categoriesIndex],
             name: faker.company.companyName(),
             claimed: Claimstatus,

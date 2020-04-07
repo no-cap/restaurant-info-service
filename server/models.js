@@ -1,10 +1,9 @@
-const db = require('../db/db.js')
+const db = require('../db/pg.js')
 
 var hello; 
 const Model = {
     lastRestaurant: 0,
     getCurrent: (callback) => {
-        console.log(1, Model.lastRestaurant)
         const query = `SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${Model.lastRestaurant}`;
         db.query(query, (err, data) => {
             if (err) {
@@ -26,7 +25,6 @@ const Model = {
         })
     },
     getRestaurant: (callback) => {
-        console.log(2, Model.lastRestaurant)
         const randomRestaurant = Math.floor(Math.random() * 100) +1;
         const query = `SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${randomRestaurant}`
         db.query(query, (err, data) => {
@@ -38,7 +36,6 @@ const Model = {
                     db.query(queryString, (err, data) => {
 
                         if (err) {
-                            
                             callback(err);
                         } else {
                             callback (null, data)
@@ -60,7 +57,7 @@ const Model = {
         var yyyy = today.getFullYear();
     
         today = yyyy + '-' + mm + '-' + dd;
-        var id;
+        var id; // revisar aca 
         const query = `SELECT id from restaurants where restaurantname = "${info.name}"`;
         db.query(query, (err, data) => {
             if (err) {
