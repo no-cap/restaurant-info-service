@@ -15,7 +15,7 @@
     "csv": "node testSeed/csvReviews.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-jest": "^25.1.0",
     "cassandra-driver": "^4.5.0",
     "chart.js": "^2.9.3",
